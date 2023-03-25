@@ -1,0 +1,11 @@
+-----------
+Item	Value
+LINK Token	0x779877A7B0D9E8603169DdbD7836e478b4624789Add to wallet
+VRF Coordinator	0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625
+30 gwei Key Hash	0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c
+Premium	0.25 LINK
+Max Gas Limit	2,500,000
+Minimum Confirmations	3
+Maximum Confirmations	200
+Maximum Random Values	500
+-------------
