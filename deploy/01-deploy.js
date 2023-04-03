@@ -1,28 +1,19 @@
 const { network } = require("hardhat")
 const { networkConfig, developmentChains } = require("../helper-hardhat-config")
-const { storeImages } = require("../utils/pinataSDK")
+const { storeImages, storeImagesJson } = require("../utils/pinataSDK")
 // 自己写的验证js
 const { verify } = require("../utils/verify")
-// const { storeImages, storeTokenUriMetadata } = require("../utils/yarn")
 
 const FUND_AMOUNT = "1000000000000000000000"
 const imagesLocation = "./images/randomNft"
-// let tokenUris = [
-//     "ipfs://QmYUvwc8E8KNJjwkJWKBSuNzmk8RDKeXtgoW2atu4nva3Y",
-//     "ipfs://QmNh4kJvWmE6irA1RJerhPbuHkgHTQ4tiKSYLzqbzTA6mG",
-// ]
+
 let imageUris = []
+let metadataUris = []
 
 const metadataTemplate = {
     name: "",
     description: "",
-    image: "",
-    attributes: [
-        {
-            trait_type: "Cuteness",
-            value: 100,
-        },
-    ],
+    image: ""
 }
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
@@ -35,11 +26,21 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         // Check out https://github.com/PatrickAlphaC/nft-mix for a pythonic version of uploading
         // to the raw IPFS-daemon from https://docs.ipfs.io/how-to/command-line-quick-start/
         // You could also look at pinata https://www.pinata.cloud/
-        const { responses } = await storeImages(imagesLocation)
-        responses.forEach((response) => {
+        const { responses: imagesHashResponses, files } = await storeImages(imagesLocation)
+        imagesHashResponses.forEach((response) => {
             imageUris.push(`ipfs://${response.IpfsHash}`)
         })
-        console.log(imageUris)
+        for (const fileIndex in files) {
+            const metadata = { ...metadataTemplate }
+            metadata.name = files[fileIndex].replace(".png", "")
+            metadata.description = "Randomly generated ChibiNFT"
+            metadata.image = imageUris[fileIndex]
+            const metadataHashResponses = await storeImagesJson(metadata)
+            metadataUris.push(`ipfs://${metadataHashResponses.IpfsHash}`)
+        }
+        console.log("imageUris", imageUris)
+        console.log("metadataUris", metadataUris)
+        console.log("-------------------")
     }
 
     if (chainId == 31337) {
@@ -64,13 +65,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         networkConfig[chainId]["gasLane"],
         networkConfig[chainId]["mintFee"],
         networkConfig[chainId]["callbackGasLimit"],
-        imageUris,
+        metadataUris
     ]
     const ChibiNft = await deploy("ChibiNft", {
         from: deployer,
         args: arguments,
         log: true,
-        waitConfirmations: network.config.blockConfirmations || 1,
+        waitConfirmations: network.config.blockConfirmations || 1
     })
 
     if (chainId == 31337) {

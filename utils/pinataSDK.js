@@ -23,6 +23,8 @@ async function storeImagesWithPath(imageFilePath) {
             console.log(err)
         })
 }
+
+// 存储图片到IPFS，返回图片的hash
 async function storeImages(imagesFilePath) {
     const fullImagesPath = path.resolve(imagesFilePath)
 
@@ -36,8 +38,8 @@ async function storeImages(imagesFilePath) {
         const readableStreamForFile = fs.createReadStream(`${fullImagesPath}/${files[fileIndex]}`)
         const options = {
             pinataMetadata: {
-                name: files[fileIndex],
-            },
+                name: files[fileIndex]
+            }
         }
         try {
             await pinata
@@ -55,7 +57,23 @@ async function storeImages(imagesFilePath) {
     return { responses, files }
 }
 
+async function storeImagesJson(imagesJson) {
+    const josnName = imagesJson.name + ".json"
+    const options = {
+        pinataMetadata: {
+            name: josnName
+        }
+    }
+    try {
+        const responses = await pinata.pinJSONToIPFS(imagesJson, options)
+        return responses
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     storeImagesWithPath,
     storeImages,
+    storeImagesJson
 }

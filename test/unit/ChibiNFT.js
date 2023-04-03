@@ -94,12 +94,12 @@ const { developmentChains } = require("../../helper-hardhat-config")
           describe("getChibiTokenUris", async () => {
               it("should return SR_NEKO ipfs hash", async () => {
                   expect(await randomIpfsNft.getChibiTokenUris(0)).equal(
-                      "ipfs://QmdhK3E6msDzUEdN6cPLVnbwFErQM1vE8HwE1GhTAk8oZ8"
+                      "ipfs://QmZLUBDLWkNsFzBMAtV6eyxCpPexEUrtSRKsozLfZqERC2"
                   )
               })
               it("should return R_NEKO ipfs hash", async () => {
                   expect(await randomIpfsNft.getChibiTokenUris(1)).equal(
-                      "ipfs://QmYetmfhH9u5q5RoR7pdkwPPWiKCAGFtUbArBSmfv3z6w1"
+                      "ipfs://QmV7QjKwiT1sk5bCgYR1NcKvqzi98pwaLjpdt7giXNzXMB"
                   )
               })
           })
