@@ -1,5 +1,7 @@
 # 项目介绍
 hardhat-nftv2-caim 是一个使用 Solidity 和 Hardhat 构建的智能合约项目，用于创建和铸造 Chibi NFT。它使用 Chainlink VRF 生成随机数以用于铸造 NFT。
+# 合约地址
+Sepolia：https://sepolia.etherscan.io/address/0x9f0406efa38978c27f0f0ea57aa3cc402c8bc86f
 
 # 代码概述
 主要合约文件是 ChibiNft.sol。该文件包含 ChibiNft 合约，它继承自 ERC721URIStorage，VRFConsumerBaseV2 和 Ownable。
